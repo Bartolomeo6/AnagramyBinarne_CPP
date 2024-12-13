@@ -16,6 +16,7 @@ int licz_jedynki(string tekst){
     return licznik;
 }
 
+// konwersja BIN -> DEC
 int dwojki_na_dzies(string l){ 
     int liczba = 0; 
     int waga = l.size() - 2; // znak bialy na koncu linii
@@ -32,6 +33,7 @@ int dwojki_na_dzies(string l){
     return liczba; 
 }
 
+// konwersja DEC -> BIN
 string dzies_na_dwojki(int li){
     string binarna;
     while(li > 0){
@@ -47,6 +49,7 @@ string dzies_na_dwojki(int li){
     return binarna;
 }
 
+// obliczanie wartosci bezwzglednej
 int wartosc_bezwzgledna(int liczba){
     if(liczba < 0){
         liczba *= -1;
@@ -54,7 +57,9 @@ int wartosc_bezwzgledna(int liczba){
     return liczba;
 }
 
+// glowna funkcja
 void przetwarzaj_zadania(){
+    
     int zrownowazoneLiczby = 0;
     int prawieZrownowazone = 0;
     
@@ -64,8 +69,8 @@ void przetwarzaj_zadania(){
     int liczba_dz = 0;
     int najwLiczbDz = 0;
     int bezCyfryZero = 0;
-    int sumaRoz = 0, najwSuma = 0;
     
+    int sumaRoz = 0, najwSuma = 0;
     int roznica = 0, najwRoznica = 0;
     
     vector<string> liczby_binarne;
@@ -79,9 +84,11 @@ void przetwarzaj_zadania(){
     
     bool maZero = false;
     
+    // wejscie do plikow
     ifstream wejdzPlik("anagram.txt");
     ofstream zapisWynikuPlik("wyniki3.txt");
     
+    // warunki kontrolne
     if(!wejdzPlik.is_open()){
         cerr << "Blad przy otwieraniu pliku anagram.txt" << endl;
         return;
@@ -92,6 +99,7 @@ void przetwarzaj_zadania(){
         return;
     }
     
+    // glowna petla, odczytujaca plik linia po linii
     while(getline(wejdzPlik, linia)){
         
         // ------------- ZADANIE 3.1 --------------- //
