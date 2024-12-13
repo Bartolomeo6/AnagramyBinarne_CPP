@@ -54,13 +54,34 @@ int wartosc_bezwzgledna(int liczba){
     return liczba;
 }
 
-void licz_jedynki_i_zera(){
+void przetwarzaj_zadania(){
     int zrownowazoneLiczby = 0;
     int prawieZrownowazone = 0;
-
-    ifstream wejdzPlik("przyklad.txt");
+    
+    int licznikZera = 0;
+    int licznikJedynki = 0;
+    
+    int liczba_dz = 0;
+    int najwLiczbDz = 0;
+    int bezCyfryZero = 0;
+    int sumaRoz = 0, najwSuma = 0;
+    
+    int roznica = 0, najwRoznica = 0;
+    
+    vector<string> liczby_binarne;
+    vector<int> liczby_dziesietne;
+    
+    string linia = "";
+    string najwRozBin = "";
+    string liczba_str = "";
+    
+    set<int> unikal_cyfry;
+    
+    bool maZero = false;
+    
+    ifstream wejdzPlik("anagram.txt");
     ofstream zapisWynikuPlik("wyniki3.txt");
-
+    
     if(!wejdzPlik.is_open()){
         cerr << "Blad przy otwieraniu pliku anagram.txt" << endl;
         return;
@@ -70,13 +91,13 @@ void licz_jedynki_i_zera(){
         cerr << "Blad, plik wyniki3.txt nie moze zostac otwarty" << endl;
         return;
     }
-
-    string linia;
-
+    
     while(getline(wejdzPlik, linia)){
-        int licznikZera = 0;
-        int licznikJedynki = 0;
-
+        
+        // ------------- ZADANIE 3.1 --------------- //
+        licznikZera = 0;
+        licznikJedynki = 0;
+        
         for(char c : linia){
             if(c == '0'){
                 licznikZera++;
@@ -92,84 +113,23 @@ void licz_jedynki_i_zera(){
         else if(wartosc_bezwzgledna(licznikZera - licznikJedynki) == 1){
             prawieZrownowazone++;
         }
-    }
-
-    zapisWynikuPlik<<"Zadanie 3.1."<<endl;
-    zapisWynikuPlik<<"Liczby zrownowazone: "<<zrownowazoneLiczby<<endl;
-    zapisWynikuPlik<<"Liczby prawie zrównowazone: "<<prawieZrownowazone<<endl;
-
-    cout<<"Ilosc zrownowazonych: "<<zrownowazoneLiczby<<endl;
-    cout<<"Ilosc prawie zrownowazonych: "<<prawieZrownowazone<<endl;
-
-    wejdzPlik.close();
-    zapisWynikuPlik.close();
-}
-
-void anagram_cyfr(){
-    vector<string> liczby;
-    ifstream wejdzPlik("przyklad.txt");
-    ofstream zapisWynikuPlik("wyniki3.txt");
-    
-    string linia;
-    while(getline(wejdzPlik, linia)){
-        //cout<<(linia.size()-1 == 8 ? linia : "")<<endl;
-        liczby.push_back(linia);
-    }
-    
-    for(int i = 0; i<liczby.size(); i++){
-        if(liczby[i].length()-1 == 8 && licz_jedynki(liczby[i]) > 3 && licz_jedynki(liczby[i]) < 6){
-            cout<<liczby[i]<<endl;
-        }
-    }
-    
-    wejdzPlik.close();
-    zapisWynikuPlik.close();
-}
-
-void sasiedzi_liczbowi(){
-    vector<int> liczby_dziesietne;
-    string linia;
-    int roznica = 0, najwRoznica = 0;
-    ifstream wejdzPlik("anagram.txt");
-    ofstream zapisWynikuPlik("wyniki3.txt");
-    
-    while(getline(wejdzPlik, linia)){
+        
+        // ------------- ZADANIE 3.2 --------------- //
+        
+        liczby_binarne.push_back(linia);
+        
+        // ------------- ZADANIE 3.3 --------------- //
+        
         liczby_dziesietne.push_back(dwojki_na_dzies(linia));
-    }
-    
-    for(size_t it = 0; it<liczby_dziesietne.size()-1; it++){
-        roznica = wartosc_bezwzgledna(liczby_dziesietne[it] - liczby_dziesietne[it+1]);
-        if(roznica>najwRoznica){
-            najwRoznica = roznica;
-        }
-    }
-    
-    string najwRozBin = dzies_na_dwojki(najwRoznica);
-
-    zapisWynikuPlik<<"Najwieksza roznica (bin): "<<najwRozBin;
-    
-    wejdzPlik.close();
-    zapisWynikuPlik.close();
-}
-
-void suma_roznych(){
-    set<int> unikal_cyfry;
-    
-    int liczba_dz = 0;
-    int najwLiczbDz = 0;
-    int bezCyfryZero = 0;
-    int sumaRoz = 0, najwSuma = 0;
-    ifstream wejdzPlik("anagram.txt");
-    ofstream zapisWynikuPlik("wyniki3.txt");
-    
-    string linia;
-    while(getline(wejdzPlik, linia)){
+        
+        // ------------- ZADANIE 3.4 --------------- //
+        
         sumaRoz = 0;
         liczba_dz = (dwojki_na_dzies(linia));
-        string l_str = to_string(liczba_dz);
+        liczba_str = to_string(liczba_dz);
         
-        bool maZero = false; 
-        for(char zer: l_str){ 
+        maZero = false; 
+        for(char zer: liczba_str){ 
             if(zer == '0'){ 
                 maZero = true; 
                 break; 
@@ -178,13 +138,15 @@ void suma_roznych(){
         if(!maZero){ 
             bezCyfryZero++; 
         }
-        
-        for(char roz: l_str){
-            unikal_cyfry.insert(roz);
+
+        // dodanie unikalnych cyfr do zbioru
+        for(char cyfra: liczba_str){
+            unikal_cyfry.insert(cyfra);
         }
-        
-        for(int sRoz: unikal_cyfry){
-            sumaRoz += sRoz;
+
+        // suma unikalnych cyfr
+        for(int unik_cyfra: unikal_cyfry){
+            sumaRoz += unik_cyfra;
         }
         
         if(sumaRoz > najwSuma){
@@ -195,15 +157,56 @@ void suma_roznych(){
         unikal_cyfry.clear();
     }
 
-    cout<<"Ilosc liczb bez zera: "<<bezCyfryZero<<endl;
-    cout<<"Najwieksza suma roznych cyfr (liczba): "<<najwLiczbDz<<endl;
+// ------------- ZADANIE 3.3 - obliczanie najwiekszej roznicy --------------- //
+    
+    for(auto it = 0; it<liczby_dziesietne.size()-1; it++){
+        roznica = wartosc_bezwzgledna(liczby_dziesietne[it] - liczby_dziesietne[it+1]);
+        if(roznica>najwRoznica){
+            najwRoznica = roznica;
+        }
+    }
+    
+    najwRozBin = dzies_na_dwojki(najwRoznica);
+
+// ------------- ZADANIE 3.1 - zapis --------------- //
+    
+    zapisWynikuPlik<<"Zadanie 3.1."<<endl;
+    zapisWynikuPlik<<"Liczby zrownowazone: "<<zrownowazoneLiczby<<endl;
+    zapisWynikuPlik<<"Liczby prawie zrownowazone: "<<prawieZrownowazone<<"\n"<<endl;
+
+// ------------- ZADANIE 3.2 - zapis + sprytny sposob na znalezienie najwiekszej liczby kombinacji --------------- //
+    
+    zapisWynikuPlik<<"Zadanie 3.2."<<endl;
+    for(int i = 0; i<liczby_binarne.size(); i++){
+        if(liczby_binarne[i].length()-1 == 8 && licz_jedynki(liczby_binarne[i]) > 3 && licz_jedynki(liczby_binarne[i]) < 6){
+            //cout<<liczby_binarne[i]<<endl;
+            zapisWynikuPlik<<liczby_binarne[i]<<endl;
+        }
+    }
+
+// ------------- ZADANIE 3.3 - zapis --------------- //
+
+    zapisWynikuPlik<<"\n";
+    zapisWynikuPlik<<"Zadanie 3.3."<<endl;
+    zapisWynikuPlik<<"Najwieksza roznica (bin): "<<najwRozBin<<"\n"<<endl;
+
+// ------------- ZADANIE 3.4 - zapis --------------- //
+    
+    zapisWynikuPlik<<"Zadanie 3.4."<<endl;
+    zapisWynikuPlik<<"Ilosc liczb bez zera: "<<bezCyfryZero<<endl;
+    zapisWynikuPlik<<"Najwieksza suma roznych cyfr (liczba): "<<najwLiczbDz<<endl;
+
+// ------------- Zamkniecie plikow --------------- //
+    
+    wejdzPlik.close();
+    zapisWynikuPlik.close();
+    
 }
 
 int main()
 {
-    licz_jedynki_i_zera();
-    anagram_cyfr();
-    sasiedzi_liczbowi();
-    suma_roznych();
+    przetwarzaj_zadania();
+    cout<<"Praca wykonana przez: Bartosz Kucharzyszyn 4P"<<endl;
+    
     return 0;
 }
